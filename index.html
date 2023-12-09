@@ -30,8 +30,13 @@
     }
   })
 </script>
-<a-scene cursor="rayOrigin: mouse" raycaster="objects: a-sphere">
+<a-scene embedded arjs='trackingMethod: best;'>
+  <!-- Vos objets ici -->
   <a-box foo position="-2 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
   <a-text color="black" position="-1.75 2 -3" value="hover to speed up"></a-text>
   <a-sphere position="-1 1.5 -3" radius="0.25" color="#EF2D5E"></a-sphere>
+
+  <!-- Ajoutez une entité de caméra ar -->
+  <a-entity camera ar></a-entity>
 </a-scene>
+
