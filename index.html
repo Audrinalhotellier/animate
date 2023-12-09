@@ -1,38 +1,51 @@
-<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-<script>
-  // component declaration
-  AFRAME.registerComponent("foo", {
-    init: function() {
-      this.xMax = 4;  // x upper boundary
-      this.xMin = -4; // x lower boundary
-      this.speed = 0.005; // base movement speed
-      this.dir = 1;   // animation direction 
-      
-      // hovering over the sphere will change the animation speed 
-      const sphere = document.querySelector("a-sphere")
-      this.speedUp = this.changeSpeed.bind(this, 0.01);
-      this.slowDown = this.changeSpeed.bind(this, 0.005);
-      sphere.addEventListener("mouseenter", this.speedUp) // hover
-      sphere.addEventListener("mouseleave", this.slowDown) // leave
-    },
-    changeSpeed(spd) {
-      this.speed = spd;
-    },
-    tick: function(t, dt) {
-      // grab the underlying THREE.js position
-      const pos = this.el.object3D.position
-      // check if the object has passed the boundaries - if so, change the direction
-      if (pos.x > this.xMax) this.dir = -1;
-      if (pos.x < this.xMin) this.dir = 1;
-       
-      // update the position using the direction and speed
-      pos.x += this.dir * this.speed * dt;
-    }
-  })
-</script>
-<a-scene cursor="rayOrigin: mouse" raycaster="objects: a-sphere">
-  <a-box foo position="-2 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-  <a-text color="black" position="-1.75 2 -3" value="hover to speed up"></a-text>
-  <a-sphere position="-1 1.5 -3" radius="0.25" color="#EF2D5E"></a-sphere>
-</a-scene> 
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <title>Document</title>
+</head>
+
+<body style='margin: 0px; overflow: hidden;'>
+  <a-scene cursor="rayOrigin: mouse" raycaster="objects: a-sphere">
+    <a-box foo position="-2 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+    <a-text color="black" position="-1.75 2 -3" value="hover to speed up"></a-text>
+    <a-sphere position="-1 1.5 -3" radius="0.25" color="#EF2D5E"></a-sphere>
+  </a-scene>
+
+  <script>
+    // component declaration
+    AFRAME.registerComponent("foo", {
+      init: function () {
+        this.xMax = 4;  // x upper boundary
+        this.xMin = -4; // x lower boundary
+        this.speed = 0.005; // base movement speed
+        this.dir = 1;   // animation direction 
+
+        // hovering over the sphere will change the animation speed 
+        const sphere = document.querySelector("a-sphere")
+        this.speedUp = this.changeSpeed.bind(this, 0.01);
+        this.slowDown = this.changeSpeed.bind(this, 0.005);
+        sphere.addEventListener("mouseenter", this.speedUp) // hover
+        sphere.addEventListener("mouseleave", this.slowDown) // leave
+      },
+      changeSpeed(spd) {
+        this.speed = spd;
+      },
+      tick: function (t, dt) {
+        // grab the underlying THREE.js position
+        const pos = this.el.object3D.position
+        // check if the object has passed the boundaries - if so, change the direction
+        if (pos.x > this.xMax) this.dir = -1;
+        if (pos.x < this.xMin) this.dir = 1;
+
+        // update the position using the direction and speed
+        pos.x += this.dir * this.speed * dt;
+      }
+    })
+  </script>
+</body>
+
+</html>
