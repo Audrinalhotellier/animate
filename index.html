@@ -1,7 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1.3.0/dist/aframe-master.min.js"></script>
   <!--<script src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>-->
   <script src='./aframe-ar-nft.js'></script>
+  <title>Document</title>
   <style>
     .arjs-loader {
       height: 100%;
@@ -27,51 +33,53 @@
       height: 350px;
     }
   </style>
+  <script>
+    // component declaration
+    AFRAME.registerComponent("foo", {
+      init: function () {
+        this.xMax = 4;  // x upper boundary
+        this.xMin = -4; // x lower boundary
+        this.speed = 0.005; // base movement speed
+        this.dir = 1;   // animation direction 
+
+        // hovering over the sphere will change the animation speed 
+        const sphere = this.el; // Using 'this.el' to refer to the entity with the component
+        this.speedUp = this.changeSpeed.bind(this, 0.01);
+        this.slowDown = this.changeSpeed.bind(this, 0.005);
+        sphere.addEventListener("mouseenter", this.speedUp); // hover
+        sphere.addEventListener("mouseleave", this.slowDown); // leave
+      },
+      changeSpeed(spd) {
+        this.speed = spd;
+      },
+      tick: function (t, dt) {
+        // grab the underlying THREE.js position
+        const pos = this.el.object3D.position;
+        // check if the object has passed the boundaries - if so, change the direction
+        if (pos.x > this.xMax) this.dir = -1;
+        if (pos.x < this.xMin) this.dir = 1;
+
+        // update the position using the direction and speed
+        pos.x += this.dir * this.speed * dt;
+      }
+    })
+  </script>
 </head>
+
 <body style='margin : 0px; overflow: hidden;'>
   <div class="arjs-loader">
     <div>Loading, please wait...</div>
   </div>
   <a-scene vr-mode-ui="enabled: false;" renderer='antialias: true; alpha: true; precision: medium;' embedded
     arjs='trackingMethod: best; sourceType: webcam; debugUIEnabled: false;'>
-    <script>
-      // component declaration
-      AFRAME.registerComponent("foo", {
-        init: function() {
-          this.xMax = 4;  // x upper boundary
-          this.xMin = -4; // x lower boundary
-          this.speed = 0.005; // base movement speed
-          this.dir = 1;   // animation direction 
-
-          // hovering over the sphere will change the animation speed 
-          const sphere = document.querySelector("a-sphere")
-          this.speedUp = this.changeSpeed.bind(this, 0.01);
-          this.slowDown = this.changeSpeed.bind(this, 0.005);
-          sphere.addEventListener("mouseenter", this.speedUp) // hover
-          sphere.addEventListener("mouseleave", this.slowDown) // leave
-        },
-        changeSpeed(spd) {
-          this.speed = spd;
-        },
-        tick: function(t, dt) {
-          // grab the underlying THREE.js position
-          const pos = this.el.object3D.position
-          // check if the object has passed the boundaries - if so, change the direction
-          if (pos.x > this.xMax) this.dir = -1;
-          if (pos.x < this.xMin) this.dir = 1;
-
-          // update the position using the direction and speed
-          pos.x += this.dir * this.speed * dt;
-        }
-      })
-    </script>
-    <a-scene cursor="rayOrigin: mouse" raycaster="objects: a-sphere">
-      <a-box foo position="-2 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-      <a-text color="black" position="-1.75 2 -3" value="hover to speed up"></a-text>
-      <a-sphere position="-1 1.5 -3" radius="0.25" color="#EF2D5E"></a-sphere>
-    </a-scene>
+    <a-box foo position="-2 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+    <a-text color="black" position="-1.75 2 -3" value="hover to speed up"></a-text>
+    <a-sphere foo position="-1 1.5 -3" radius="0.25" color="#EF2D5E"></a-sphere>
   </a-scene>
 </body>
+
+</html>
+
 
 
 
